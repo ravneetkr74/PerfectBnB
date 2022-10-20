@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "901342303730",
+    "project_id": "perfectbnb-22d05",
+    "storage_bucket": "perfectbnb-22d05.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:901342303730:android:25ea94c164e07f43fe876b",
+        "android_client_info": {
+          "package_name": "com.lambton.perfectbnb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "901342303730-1l5lgf18u77f06sncic42n3mk0298cko.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lambton.perfectbnb",
+            "certificate_hash": "ef82e8bec12af60419bbd174dc6fc7524b0c048f"
+          }
+        },
+        {
+          "client_id": "901342303730-h64jk32fb3jq2h5bbrm0e6tg7it29e1h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3j8Su-BUmBu5eKqsKZ6XthnFhoqukj2U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "901342303730-h64jk32fb3jq2h5bbrm0e6tg7it29e1h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
