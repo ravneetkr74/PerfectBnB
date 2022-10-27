@@ -26,6 +26,8 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.Array
@@ -124,6 +126,7 @@ class MapsFragment : Fragment() {
                     Log.e("@#@","get lat"+lat)
                     Log.e("@#@","get lng"+lng)
                     // use latitude and longitude as per your need
+                    saveLocationToFirebase(lat,lng)
                     flag=true
                     show_status.visibility=View.VISIBLE
                     locate_me.text="Start Search"
@@ -194,7 +197,7 @@ class MapsFragment : Fragment() {
                             "@#@#", "get Address\n" +
                                     "${list[0].getAddressLine(0)}"
                         )
-
+                        saveLocationToFirebase(lat,lng)
                         flag=true
                         show_status.visibility=View.VISIBLE
                         locate_me.text="Start Search"
@@ -256,5 +259,16 @@ class MapsFragment : Fragment() {
             }
         }
 
+    }
+    fun saveLocationToFirebase(lat:String,lng:String){
+        val database = FirebaseDatabase.getInstance()
+        val myRef = database.reference
+       val firebaseAuth= FirebaseAuth.getInstance()
+
+        val locationData
+                = HashMap<String, Any> ()
+        locationData.put("lat",lat)
+        locationData.put("long",lng)
+        myRef.child("Users").child(firebaseAuth.currentUser!!.uid).updateChildren(locationData)
     }
 }
