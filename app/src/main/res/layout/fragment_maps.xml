@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:context=".ui.MapsFragment" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_margin="40dp"
@@ -25,6 +25,7 @@
         android:id="@+id/locate_me"
         android:textColor="@color/white"
         android:textAllCaps="false"
+        android:background="@drawable/button_bg"
         app:layout_constraintBottom_toBottomOf="@+id/map"
         app:layout_constraintStart_toStartOf="parent" />
 
