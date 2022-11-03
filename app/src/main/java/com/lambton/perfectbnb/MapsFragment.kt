@@ -28,6 +28,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import kotlinx.android.synthetic.main.header_layout.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.Array
@@ -47,6 +48,7 @@ class MapsFragment : Fragment() {
      var lat: String="-34.0"
      var lng: String="151.0"
     var flag:Boolean=false
+    lateinit var locality:String
     lateinit var mapFragment:SupportMapFragment
    private lateinit var locationRequest:com.google.android.gms.location.LocationRequest
     private lateinit var locationCallback: LocationCallback
@@ -80,6 +82,7 @@ class MapsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val v: View = inflater.inflate(R.layout.fragment_maps, container, false)
+
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         locationRequest = LocationRequest.create().apply{
             // Sets the desired interval for
@@ -109,6 +112,9 @@ class MapsFragment : Fragment() {
             if(locate_me.text.equals("Start Search")){
 
                 val fragment = ShowData()
+                val bundle = Bundle()
+                bundle.putString("city",locality)
+                fragment.arguments=bundle
                 requireActivity().supportFragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit()
 
             }else {
@@ -126,6 +132,10 @@ class MapsFragment : Fragment() {
                     Log.e("@#@","get lat"+lat)
                     Log.e("@#@","get lng"+lng)
                     // use latitude and longitude as per your need
+                    val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                    val list: List<Address> =
+                        geocoder.getFromLocation(p0.lastLocation.latitude, p0.lastLocation.longitude, 1)
+                    locality = "${list[0].locality}"
                     saveLocationToFirebase(lat,lng)
                     flag=true
                     show_status.visibility=View.VISIBLE
@@ -187,7 +197,7 @@ class MapsFragment : Fragment() {
                             "@#@#", "get Country Name\n" +
                                     "${list[0].countryName}"
                         )
-                        var locality = "Locality\n${list[0].locality}"
+                        locality = "${list[0].locality}"
                         Log.e(
                             "@#@#", "get Locality\n" +
                                     "${list[0].locality}"
@@ -197,6 +207,7 @@ class MapsFragment : Fragment() {
                             "@#@#", "get Address\n" +
                                     "${list[0].getAddressLine(0)}"
                         )
+
                         saveLocationToFirebase(lat,lng)
                         flag=true
                         show_status.visibility=View.VISIBLE

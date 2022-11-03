@@ -22,4 +22,7 @@
     <style name="Theme.PerfectBnB.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.PerfectBnB.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/rounded_corners</item>
+    </style>
 </resources>

@@ -1,6 +1,7 @@
 package com.lambton.perfectbnb
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.ui.AppBarConfiguration
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         val fragment = MapsFragment()
         supportFragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit()
         txt_title.text="PerfectBnB"
+
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
