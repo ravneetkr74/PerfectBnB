@@ -39,8 +39,13 @@ class LoginActivity : AppCompatActivity() {
         firebaseAuth.signInWithEmailAndPassword(email,password)
             .addOnCompleteListener(this){
                 if(it.isSuccessful){
-                    val intent= Intent(this,MainActivity::class.java)
-                    startActivity(intent)
+                    if(email == "admin@gmail.com"){
+                        val intent = Intent(this, AdminMainActivity::class.java)
+                        startActivity(intent)
+                    }else {
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                    }
 
                 }else{
                     Toast.makeText(this,"Error while login",Toast.LENGTH_SHORT).show()
