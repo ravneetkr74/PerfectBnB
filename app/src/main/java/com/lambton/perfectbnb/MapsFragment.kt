@@ -114,6 +114,8 @@ class MapsFragment : Fragment() {
                 val fragment = ShowData()
                 val bundle = Bundle()
                 bundle.putString("city",locality)
+                bundle.putDouble("lat",lat.toDouble())
+                bundle.putDouble("lng",lng.toDouble())
                 fragment.arguments=bundle
                 requireActivity().supportFragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit()
 

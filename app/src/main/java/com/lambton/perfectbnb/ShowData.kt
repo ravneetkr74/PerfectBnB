@@ -14,7 +14,10 @@ import kotlinx.android.synthetic.main.header_layout.*
 
 class ShowData : Fragment() {
     var cityname: String? = ""
-
+     val APIKEY:String="881ca47ef874c2b67cad0cfdd95b95e9"
+    val URL:String="https://api.openweathermap.org/data/2.5/weather?"
+    var latitude:Double?=0.0
+    var longitude:Double?=0.0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -27,6 +30,9 @@ class ShowData : Fragment() {
         // Inflate the layout for this fragment
         val v: View = inflater.inflate(R.layout.fragment_show_data, container, false)
         cityname = arguments?.getString("city")
+        latitude=arguments?.getDouble("lat")
+        longitude=arguments?.getDouble("lng")
+
         requireActivity().setting.visibility=View.VISIBLE
         requireActivity().setting.setOnClickListener {
 
