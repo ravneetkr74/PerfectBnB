@@ -53,7 +53,7 @@ class AdminMainActivity : AppCompatActivity() {
         val myRef = database.reference
         val firebaseAuth= FirebaseAuth.getInstance()
 
-        myRef.child("Admin").child(firebaseAuth.currentUser!!.uid).addChildEventListener(object : ChildEventListener {
+        myRef.child("Places").addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(
                 snapshot: DataSnapshot,
                 @Nullable previousChildName: String?

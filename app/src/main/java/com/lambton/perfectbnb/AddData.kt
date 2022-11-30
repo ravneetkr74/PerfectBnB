@@ -3,6 +3,7 @@ package com.lambton.perfectbnb
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -60,40 +61,41 @@ class AddData : AppCompatActivity() {
                 Toast.makeText(this, "Add Longitude", Toast.LENGTH_SHORT).show()
 
             }else{
-                saveAdminDataToFirebase(title,descrp,lat,lng)
-                if(selectedImage==null){
 
+                if(selectedImage==null){
+                    Toast.makeText(this, "Image is required!", Toast.LENGTH_SHORT).show()
                 }else{
-                    uploadImageToFirebase(selectedImage!!)
+                    uploadImageToFirebase(selectedImage!!,title,descrp,lat,lng)
                 }
-                Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show()
-                val intent= Intent(this,AdminMainActivity::class.java)
-                startActivity(intent)
-                finish()
+
             }
 
         }
     }
-    fun saveAdminDataToFirebase(title:String,desc:String,lat:String,lng:String){
+    private fun saveAdminDataToFirebase(title:String, desc:String, lat:String, lng:String, image:String){
         val database = FirebaseDatabase.getInstance()
         val myRef = database.reference
-        val firebaseAuth= FirebaseAuth.getInstance()
 
         ItemviewModel.Title=title
         ItemviewModel.Description=desc
         ItemviewModel.lat=lat
         ItemviewModel.lng=lng
+       // ItemviewModel.Image = image
+
+Log.e("xxx",image)
 
 
-        myRef.child("Admin").child(firebaseAuth.currentUser!!.uid).push().setValue(ItemviewModel)
+        myRef.child("Places").push().setValue(ItemviewModel)
 
 
     }
 
-    fun uploadImageToFirebase(bitmap: Bitmap){
-        val firebaseAuth= FirebaseAuth.getInstance()
+    fun uploadImageToFirebase(bitmap: Bitmap,title:String,desc:String,lat:String,lng:String){
+
+
         val baos=ByteArrayOutputStream()
-        val storageRef: StorageReference = FirebaseStorage.getInstance().reference.child("Admin").child(firebaseAuth.currentUser!!.uid)
+        val filename = java.util.UUID.randomUUID().toString()
+        val storageRef: StorageReference = FirebaseStorage.getInstance().reference.child("places/"+filename+".jpg")
           bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos)
         val image=baos.toByteArray()
         val upload=storageRef.putBytes(image)
@@ -101,7 +103,12 @@ class AddData : AppCompatActivity() {
             if(uploadTask.isSuccessful){
                 storageRef.downloadUrl.addOnCompleteListener{ uriTask ->
                     uriTask.result.let {
-                        Toast.makeText(applicationContext,it.path,Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(applicationContext,it.path,Toast.LENGTH_SHORT).show()
+                        saveAdminDataToFirebase(title,desc,lat,lng,it.path.toString())
+                        Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show()
+                        val intent= Intent(this,AdminMainActivity::class.java)
+                        startActivity(intent)
+                        finish()
 
                     }
 
