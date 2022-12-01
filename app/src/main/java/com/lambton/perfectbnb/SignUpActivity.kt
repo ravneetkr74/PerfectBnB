@@ -27,7 +27,7 @@ class SignUpActivity : AppCompatActivity() {
             val intent=Intent(this,LoginActivity::class.java)
             startActivity(intent)
         }
-        autoLogin()
+       // autoLogin()
 
 
     }
