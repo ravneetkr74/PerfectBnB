@@ -1,5 +1,6 @@
 package com.lambton.perfectbnb.user
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -18,7 +19,9 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.annotations.Nullable
+import com.google.gson.Gson
 import com.lambton.perfectbnb.R
+import com.lambton.perfectbnb.admin.AddData
 import com.lambton.perfectbnb.admin.AdminMainAdapter
 import com.lambton.perfectbnb.models.ItemviewModel
 import com.lambton.perfectbnb.models.ModalClass
@@ -111,8 +114,12 @@ class ShowData : Fragment() {
         recyclerview.layoutManager = LinearLayoutManager(requireContext())
         adapter = object : AdminMainAdapter(requireContext(), updatedList) {
             override fun itemClickListener(position: Int) {
+                val intent= Intent(context, AddData::class.java)
+                val gson = Gson()
+                val myJson = gson.toJson(updatedList[position])
+                intent.putExtra("data", myJson)
+                startActivity(intent)
 
-                Toast.makeText(requireContext(),"get click"+position,Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -173,7 +180,7 @@ class ShowData : Fragment() {
         Log.e("@#@","get list"+updatedList.size)
 
 
-        recycler.adapter = adapter
+        recyclerview.adapter = adapter
 
     }
 
