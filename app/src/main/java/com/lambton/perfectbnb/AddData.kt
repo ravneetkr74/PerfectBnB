@@ -1,16 +1,18 @@
 package com.lambton.perfectbnb
 
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.gson.Gson
+import com.squareup.picasso.Picasso
 import com.vansuita.pickimage.bundle.PickSetup
 import com.vansuita.pickimage.dialog.PickImageDialog
 import kotlinx.android.synthetic.main.activity_add_data.*
@@ -23,11 +25,39 @@ import java.io.ByteArrayOutputStream
 class AddData : AppCompatActivity() {
    var ItemviewModel:ItemviewModel = ItemviewModel("","","","","")
     var selectedImage: Bitmap? = null
+    var selectedPlace: ItemviewModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_data)
         setting.visibility= View.GONE
         txt_title.text="Add Place"
+        backButton.visibility = View.VISIBLE
+
+        val gson = Gson()
+         selectedPlace = gson.fromJson(intent.getStringExtra("data"), ItemviewModel::class.java)
+        selectedPlace?.let { place ->
+            txt_title.text = "Show Place"
+
+            data_title.setText(place.Title.toString())
+            descp.setText(place.Description.toString())
+            lat.setText(place.lat.toString())
+            lng.setText(place.lng.toString())
+            val url: String? = place.Image
+            imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+            url?.let {
+                Picasso.get().load(it).into(imageView)
+            }
+            add.visibility = View.GONE
+            data_title.isEnabled = false
+            descp.isEnabled = false
+            lat.isEnabled = false
+            lng.isEnabled = false
+            imageView.isEnabled = false
+        }
+
+        backButton.setOnClickListener{
+            finish()
+        }
         imageView.setOnClickListener {
             val dialog: PickImageDialog =
                 PickImageDialog.build(PickSetup()).show(this)

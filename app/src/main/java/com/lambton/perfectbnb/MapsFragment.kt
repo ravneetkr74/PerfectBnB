@@ -81,6 +81,7 @@ class MapsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        super.onCreate(savedInstanceState);
         val v: View = inflater.inflate(R.layout.fragment_maps, container, false)
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())

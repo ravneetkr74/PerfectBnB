@@ -9,20 +9,20 @@
         android:id="@+id/header"/>
 
     <EditText
+        android:id="@+id/data_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="30dp"
         android:hint="Title"
-       android:paddingLeft="5dp"
+
+        android:paddingLeft="5dp"
         android:textColor="@color/black"
         android:textSize="16sp"
-        android:id="@+id/data_title"
-
         app:layout_constraintEnd_toEndOf="parent"
-       android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <EditText
         android:layout_width="0dp"
@@ -73,24 +73,14 @@
         app:layout_constraintTop_toBottomOf="@+id/lat" />
 
     <ImageView
-        android:layout_width="180dp"
-        android:layout_height="120dp"
         android:id="@+id/imageView"
+        android:layout_width="397dp"
+        android:layout_height="250dp"
+        android:scaleType="fitCenter"
         android:src="@drawable/ic_baseline_camera_alt_24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lng"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="30dp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pick Image"
-        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/header" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/add"
@@ -98,13 +88,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"
+        android:background="@drawable/button_bg"
         android:text="Add"
         android:textColor="@color/white"
-        android:background="@drawable/button_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/lng" />
 
 
 

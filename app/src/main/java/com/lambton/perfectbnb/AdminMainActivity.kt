@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
@@ -13,6 +12,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.annotations.Nullable
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_add_data.*
 import kotlinx.android.synthetic.main.activity_admin_main.*
 import kotlinx.android.synthetic.main.header_layout.*
@@ -22,24 +22,24 @@ class AdminMainActivity : AppCompatActivity() {
 
     var updatedList=ArrayList<ItemviewModel>()
     private lateinit var adapter: AdminMainAdapter
+    lateinit var firebaseAuth : FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_main)
         setting.visibility= View.VISIBLE
        setting.setImageResource(R.drawable.ic_baseline_add_circle_24)
         txt_title.text="All Places"
+        logoutButton.visibility = View.VISIBLE
+        firebaseAuth =  FirebaseAuth.getInstance()
+        logoutButton.setOnClickListener{
+            firebaseAuth.signOut();
+            finish()
+        }
         setting.setOnClickListener {
-
             val intent= Intent(this,AddData::class.java)
             startActivity(intent)
-            finish()
-
         }
         initializeListView()
-
-
-
-
     }
 
     fun initializeListView(){
@@ -49,8 +49,12 @@ class AdminMainActivity : AppCompatActivity() {
         recycler.layoutManager = LinearLayoutManager(this)
         adapter = object : AdminMainAdapter(this, updatedList) {
             override fun itemClickListener(position: Int) {
-
-                Toast.makeText(this@AdminMainActivity,"get click"+position,Toast.LENGTH_SHORT).show()
+                val intent= Intent(context,AddData::class.java)
+                val gson = Gson()
+                val myJson = gson.toJson(updatedList[position])
+                intent.putExtra("data", myJson)
+                startActivity(intent)
+              //  Toast.makeText(this@AdminMainActivity,"get click"+position,Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -58,7 +62,7 @@ class AdminMainActivity : AppCompatActivity() {
 
         val database = FirebaseDatabase.getInstance()
         val myRef = database.reference
-        val firebaseAuth= FirebaseAuth.getInstance()
+
 
         myRef.child("Places").addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(
