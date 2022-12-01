@@ -1,4 +1,4 @@
-package com.lambton.perfectbnb
+package com.lambton.perfectbnb.admin
 
 import android.content.Context
 import android.location.Address
@@ -8,8 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.lambton.perfectbnb.R
+import com.lambton.perfectbnb.models.ItemviewModel
 import com.squareup.picasso.Picasso
 
 import java.util.*
@@ -55,8 +56,7 @@ public abstract class AdminMainAdapter(val context: Context,private val mlist:Li
             ItemsViewModel.lng!!.toDouble(),
             1
         )
-        val address: String = addresses[0].getAddressLine(0)
-        holder.place.text=address
+        holder.place.text=addresses[0].locality
         holder.itemView.setOnClickListener {
             itemClickListener(position)
         }
