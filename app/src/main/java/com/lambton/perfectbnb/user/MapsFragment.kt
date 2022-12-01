@@ -45,18 +45,18 @@ class MapsFragment : Fragment() {
 
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private val permissionId = 2
-    lateinit var locality:String
-    lateinit var mapFragment:SupportMapFragment
-   private lateinit var locationRequest:com.google.android.gms.location.LocationRequest
+    lateinit var locality: String
+    lateinit var mapFragment: SupportMapFragment
+    private lateinit var locationRequest: com.google.android.gms.location.LocationRequest
     private lateinit var locationCallback: LocationCallback
-    lateinit var show_status:TextView
-    lateinit var locate_me:Button
-    var lat: String="-34.0"
-    var lng: String="151.0"
-    var flag:Boolean=false
+    lateinit var show_status: TextView
+    lateinit var locate_me: Button
+    var lat: String = "-34.0"
+    var lng: String = "151.0"
+    var flag: Boolean = false
     private val callback = OnMapReadyCallback { googleMap ->
         val latLng = LatLng(lat.toDouble(), lng.toDouble())
-        if(flag) {
+        if (flag) {
             googleMap.addMarker(MarkerOptions().position(latLng))
             val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15f)
             googleMap.animateCamera(cameraUpdate)
@@ -74,7 +74,7 @@ class MapsFragment : Fragment() {
         val v: View = inflater.inflate(R.layout.fragment_maps, container, false)
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-        locationRequest = LocationRequest.create().apply{
+        locationRequest = LocationRequest.create().apply {
             // Sets the desired interval for
             // active location updates.
             // This interval is inexact.
@@ -83,43 +83,46 @@ class MapsFragment : Fragment() {
             // Sets the fastest rate for active location updates.
             // This interval is exact, and your application will never
             // receive updates more frequently than this value
-             var fastestInterval = TimeUnit.SECONDS.toMillis(30)
+            var fastestInterval = TimeUnit.SECONDS.toMillis(30)
 
             // Sets the maximum time when batched location
             // updates are delivered. Updates may be
             // delivered sooner than this interval
-             var maxWaitTime = TimeUnit.MINUTES.toMillis(2)
+            var maxWaitTime = TimeUnit.MINUTES.toMillis(2)
 
-             var priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            var priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
 
         requireActivity().backButton.visibility = View.GONE
         requireActivity().logoutButton.visibility = View.VISIBLE
-        requireActivity().logoutButton.setOnClickListener{
+        //Logout button
+        requireActivity().logoutButton.setOnClickListener {
             val firebaseAuth = FirebaseAuth.getInstance()
             firebaseAuth.signOut();
             requireActivity().finish()
-              }
-         locate_me = v.findViewById<Button>(R.id.locate_me)
-         show_status=v.findViewById<TextView>(R.id.show_status)
-         mapFragment = (childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?)!!
+        }
+        locate_me = v.findViewById<Button>(R.id.locate_me)
+        show_status = v.findViewById<TextView>(R.id.show_status)
+        mapFragment = (childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?)!!
         mapFragment?.getMapAsync(callback)
         locate_me.setOnClickListener(View.OnClickListener {
-            if(locate_me.text.equals("Start Search")){
+            if (locate_me.text.equals("Start Search")) {
 
                 val fragment = ShowData()
                 val bundle = Bundle()
-                bundle.putString("city",locality)
-                bundle.putString("lat",lat)
-                bundle.putString("lng",lng)
-                fragment.arguments=bundle
-                requireActivity().supportFragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit()
+                bundle.putString("city", locality)
+                bundle.putString("lat", lat)
+                bundle.putString("lng", lng)
+                fragment.arguments = bundle
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.frame_container, fragment).commit()
 
-            }else {
+            } else {
                 getLocation()
             }
         })
 
+        //Callback of get location update
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
                 super.onLocationResult(p0)
@@ -131,13 +134,18 @@ class MapsFragment : Fragment() {
                     // use latitude and longitude as per your need
                     val geocoder = Geocoder(requireContext(), Locale.getDefault())
                     val list: List<Address> =
-                        geocoder.getFromLocation(p0.lastLocation.latitude, p0.lastLocation.longitude, 1)
+                        geocoder.getFromLocation(
+                            p0.lastLocation.latitude,
+                            p0.lastLocation.longitude,
+                            1
+                        )
                     locality = list[0].locality
-                    saveLocationToFirebase(lat,lng)
-                    flag=true
-                    show_status.visibility=View.VISIBLE
-                    locate_me.text="Start Search"
+                    saveLocationToFirebase(lat, lng)
+                    flag = true
+                    show_status.visibility = View.VISIBLE
+                    locate_me.text = "Start Search"
                     mapFragment?.getMapAsync(callback)
+                    //removing location update after getting location to save battery
                     val removeTask = mFusedLocationClient.removeLocationUpdates(locationCallback)
                     removeTask.addOnCompleteListener { task ->
                         if (task.isSuccessful) {
@@ -158,6 +166,7 @@ class MapsFragment : Fragment() {
 
     }
 
+    //Checking if GPS is on or not
     private fun isLocationEnabled(): Boolean {
         val locationManager: LocationManager =
             requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -167,11 +176,14 @@ class MapsFragment : Fragment() {
     }
 
     @SuppressLint("MissingPermission")
+
+    //Checking if we already have user location or not
     private fun getLocation() {
         if (checkPermissions()) {
             if (isLocationEnabled()) {
                 mFusedLocationClient.lastLocation.addOnCompleteListener(requireActivity()) { task ->
                     val location: Location? = task.result
+                    //We have user location already!
                     if (location != null) {
                         val geocoder = Geocoder(requireContext(), Locale.getDefault())
                         val list: List<Address> =
@@ -179,21 +191,27 @@ class MapsFragment : Fragment() {
                         lat = list[0].latitude.toString()
                         lng = list[0].longitude.toString()
                         locality = list[0].locality
-                        saveLocationToFirebase(lat,lng)
-                        flag=true
-                        show_status.visibility=View.VISIBLE
-                        locate_me.text="Start Search"
+                        saveLocationToFirebase(lat, lng)
+                        flag = true
+                        show_status.visibility = View.VISIBLE
+                        locate_me.text = "Start Search"
                         mapFragment.getMapAsync(callback)
-                    }else{
-
-                        mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback,
+                    }
+                    //We don't have user location so, we will request for latest location update
+                    else {
+                        mFusedLocationClient.requestLocationUpdates(
+                            locationRequest, locationCallback,
                             Looper.myLooper()!!
                         )
 
                     }
                 }
             } else {
-                Toast.makeText(requireContext(), "GPS is Disabled,Please enable it", Toast.LENGTH_LONG)
+                Toast.makeText(
+                    requireContext(),
+                    "GPS is Disabled,Please enable it",
+                    Toast.LENGTH_LONG
+                )
                     .show()
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 startActivity(intent)
@@ -203,6 +221,7 @@ class MapsFragment : Fragment() {
         }
     }
 
+    //Checking if we have location permissions or not?
     private fun checkPermissions(): Boolean {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
@@ -218,6 +237,7 @@ class MapsFragment : Fragment() {
         return false
     }
 
+    //Requesting Permissions for location
     private fun requestPermissions() {
         ActivityCompat.requestPermissions(
             requireActivity(),
@@ -242,15 +262,16 @@ class MapsFragment : Fragment() {
         }
 
     }
-    fun saveLocationToFirebase(lat:String,lng:String){
+
+    //Saving user location to firebase
+    fun saveLocationToFirebase(lat: String, lng: String) {
         val database = FirebaseDatabase.getInstance()
         val myRef = database.reference
-       val firebaseAuth= FirebaseAuth.getInstance()
+        val firebaseAuth = FirebaseAuth.getInstance()
 
-        val locationData
-                = HashMap<String, Any> ()
-        locationData.put("lat",lat)
-        locationData.put("long",lng)
+        val locationData = HashMap<String, Any>()
+        locationData.put("lat", lat)
+        locationData.put("long", lng)
         myRef.child("Users").child(firebaseAuth.currentUser!!.uid).updateChildren(locationData)
     }
 }
