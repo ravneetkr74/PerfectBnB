@@ -35,11 +35,6 @@ class AdminMainAdapter(val Context: Context,private val mlist:List<ItemviewModel
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val ItemsViewModel = mlist[position]
-
-        // sets the image to the imageview from our itemHolder class
-//        holder.imageView.setImageResource(ItemsViewModel.image)
-//
-//        // sets the text to the textview from our itemHolder class
         holder.title.text = ItemsViewModel.Title
         holder.desc.text=ItemsViewModel.Description
         val url: String? = ItemsViewModel.Image
@@ -47,19 +42,12 @@ class AdminMainAdapter(val Context: Context,private val mlist:List<ItemviewModel
             Picasso.get().load(it).into(holder.imageView)
         }
 
-
-
-        val geocoder: Geocoder
-        val addresses: List<Address>
-        geocoder = Geocoder(Context, Locale.getDefault())
-
-        addresses = geocoder.getFromLocation(
+        val geocoder: Geocoder = Geocoder(Context, Locale.getDefault())
+        val addresses: List<Address> =  geocoder.getFromLocation(
             ItemsViewModel.lat!!.toDouble(),
             ItemsViewModel.lng!!.toDouble(),
             1
-        ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-
-
+        )
         val address: String = addresses[0].getAddressLine(0)
         holder.place.text=address
 
