@@ -56,20 +56,10 @@ class MapsFragment : Fragment() {
     lateinit var locate_me:Button
 
     private val callback = OnMapReadyCallback { googleMap ->
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
         val latLng = LatLng(lat.toDouble(), lng.toDouble())
         if(flag) {
             googleMap.addMarker(MarkerOptions().position(latLng))
-//        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 10f)
+            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15f)
             googleMap.animateCamera(cameraUpdate)
         }
     }
@@ -104,7 +94,13 @@ class MapsFragment : Fragment() {
              var priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
 
-
+        requireActivity().backButton.visibility = View.GONE
+        requireActivity().logoutButton.visibility = View.VISIBLE
+        requireActivity().logoutButton.setOnClickListener{
+            val firebaseAuth = FirebaseAuth.getInstance()
+            firebaseAuth.signOut();
+            requireActivity().finish()
+              }
          locate_me = v.findViewById<Button>(R.id.locate_me)
          show_status=v.findViewById<TextView>(R.id.show_status)
          mapFragment = (childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?)!!
@@ -128,12 +124,11 @@ class MapsFragment : Fragment() {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
                 super.onLocationResult(p0)
-                p0?.lastLocation?.let {
+                p0.lastLocation.let {
                     //currentLocation = locationByGps
                     lat = p0.lastLocation.latitude.toString()
                     lng = p0.lastLocation.longitude.toString()
-                    Log.e("@#@","get lat"+lat)
-                    Log.e("@#@","get lng"+lng)
+
                     // use latitude and longitude as per your need
                     val geocoder = Geocoder(requireContext(), Locale.getDefault())
                     val list: List<Address> =
@@ -153,8 +148,6 @@ class MapsFragment : Fragment() {
                         }
                     }
 
-                } ?: {
-                    Log.d("TAG", "Location information isn't available.")
                 }
             }
         }
@@ -184,38 +177,14 @@ class MapsFragment : Fragment() {
                         val geocoder = Geocoder(requireContext(), Locale.getDefault())
                         val list: List<Address> =
                             geocoder.getFromLocation(location.latitude, location.longitude, 1)
-
                         lat = list[0].latitude.toString()
-                        Log.e(
-                            "@#@#", "get Latitude\n" +
-                                    "${list[0].latitude}"
-                        )
                         lng = list[0].longitude.toString()
-                        Log.e(
-                            "@#@#", "get Longitude\n" +
-                                    "${list[0].longitude}"
-                        )
-                        var name = "Country Name\n${list[0].countryName}"
-                        Log.e(
-                            "@#@#", "get Country Name\n" +
-                                    "${list[0].countryName}"
-                        )
-                        locality = "${list[0].locality}"
-                        Log.e(
-                            "@#@#", "get Locality\n" +
-                                    "${list[0].locality}"
-                        )
-                        var address = "Address\n${list[0].getAddressLine(0)}"
-                        Log.e(
-                            "@#@#", "get Address\n" +
-                                    "${list[0].getAddressLine(0)}"
-                        )
-
+                        locality = list[0].locality
                         saveLocationToFirebase(lat,lng)
                         flag=true
                         show_status.visibility=View.VISIBLE
                         locate_me.text="Start Search"
-                        mapFragment?.getMapAsync(callback)
+                        mapFragment.getMapAsync(callback)
                     }else{
 
                         mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback,

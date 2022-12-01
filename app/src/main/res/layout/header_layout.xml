@@ -46,10 +46,10 @@
         android:layout_height="45dp"
         android:padding="10dp"
         android:id="@+id/setting"
-        android:visibility="visible"
+        android:visibility="invisible"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_baseline_more_vert_24"/>
+        android:src="@drawable/ic_info"/>
 
     <ImageView
         android:id="@+id/backButton"

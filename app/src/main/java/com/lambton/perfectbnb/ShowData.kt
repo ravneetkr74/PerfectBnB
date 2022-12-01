@@ -35,7 +35,12 @@ class ShowData : Fragment() {
         cityname = arguments?.getString("city")
         latitude=arguments?.getString("lat").toString()
         longitude= arguments?.getString("lng").toString()
-
+        requireActivity().logoutButton.visibility = View.GONE
+        requireActivity().backButton.visibility = View.VISIBLE
+        requireActivity().backButton.setOnClickListener{
+            val fragment = MapsFragment()
+            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit()
+        }
         requireActivity().setting.visibility=View.VISIBLE
         requireActivity().setting.setOnClickListener {
 
