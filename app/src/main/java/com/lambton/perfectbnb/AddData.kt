@@ -23,21 +23,21 @@ import java.io.ByteArrayOutputStream
 
 
 class AddData : AppCompatActivity() {
-   var ItemviewModel:ItemviewModel = ItemviewModel("","","","","")
+    var ItemviewModel: ItemviewModel = ItemviewModel("", "", "", "", "")
     var selectedImage: Bitmap? = null
     var selectedPlace: ItemviewModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_data)
-        setting.visibility= View.GONE
-        txt_title.text="Add Place"
+        setting.visibility = View.GONE
+        txt_title.text = "Add Place"
         backButton.visibility = View.VISIBLE
-
+        //Getting place info from previous screen
         val gson = Gson()
-         selectedPlace = gson.fromJson(intent.getStringExtra("data"), ItemviewModel::class.java)
+        selectedPlace = gson.fromJson(intent.getStringExtra("data"), ItemviewModel::class.java)
+        //Setting place info
         selectedPlace?.let { place ->
             txt_title.text = "Show Place"
-
             data_title.setText(place.Title.toString())
             descp.setText(place.Description.toString())
             lat.setText(place.lat.toString())
@@ -48,16 +48,19 @@ class AddData : AppCompatActivity() {
                 Picasso.get().load(it).into(imageView)
             }
             add.visibility = View.GONE
+            deleteButton.visibility = View.GONE
             data_title.isEnabled = false
             descp.isEnabled = false
             lat.isEnabled = false
             lng.isEnabled = false
             imageView.isEnabled = false
+
         }
 
-        backButton.setOnClickListener{
+        backButton.setOnClickListener {
             finish()
         }
+        //Image selection on add Place screen
         imageView.setOnClickListener {
             val dialog: PickImageDialog =
                 PickImageDialog.build(PickSetup()).show(this)
@@ -70,80 +73,86 @@ class AddData : AppCompatActivity() {
                 }
                 .setOnPickCancel {}.show(this)
 
-
-
         }
+        //On click of add button we are checking all info is filled or not
         add.setOnClickListener {
-            val title=data_title.text.toString()
-            val descrp=descp.text.toString()
-            val  lat=lat.text.toString()
-            val  lng=lng.text.toString()
-            if(title.isBlank()){
-                Toast.makeText(this,"Add Title", Toast.LENGTH_SHORT).show()
+            val title = data_title.text.toString()
+            val descrp = descp.text.toString()
+            val lat = lat.text.toString()
+            val lng = lng.text.toString()
+            if (title.isBlank()) {
+                Toast.makeText(this, "Add Title", Toast.LENGTH_SHORT).show()
 
-            }else if (descrp.isBlank()) {
+            } else if (descrp.isBlank()) {
                 Toast.makeText(this, "Add Description", Toast.LENGTH_SHORT).show()
-            }else if (lat.isBlank()){
+            } else if (lat.isBlank()) {
 
                 Toast.makeText(this, "Add Latitude", Toast.LENGTH_SHORT).show()
 
-            }else if (lng.isBlank()){
+            } else if (lng.isBlank()) {
                 Toast.makeText(this, "Add Longitude", Toast.LENGTH_SHORT).show()
 
-            }else{
+            } else {
 
-                if(selectedImage==null){
+                if (selectedImage == null) {
                     Toast.makeText(this, "Image is required!", Toast.LENGTH_SHORT).show()
-                }else{
-                    uploadImageToFirebase(selectedImage!!,title,descrp,lat,lng)
+                } else {
+                    //Everything is filled now we are uploading image to firebase
+                    uploadImageToFirebase(selectedImage!!, title, descrp, lat, lng)
                 }
-
             }
-
         }
     }
-    private fun saveAdminDataToFirebase(title:String, desc:String, lat:String, lng:String, image:String){
+// This is the function which save all info in firebase.
+    private fun saveAdminDataToFirebase(
+        title: String,
+        desc: String,
+        lat: String,
+        lng: String,
+        image: String
+    ) {
         val database = FirebaseDatabase.getInstance()
         val myRef = database.reference
 
-        ItemviewModel.Title=title
-        ItemviewModel.Description=desc
-        ItemviewModel.lat=lat
-        ItemviewModel.lng=lng
+        ItemviewModel.Title = title
+        ItemviewModel.Description = desc
+        ItemviewModel.lat = lat
+        ItemviewModel.lng = lng
         ItemviewModel.Image = image
         myRef.child("Places").push().setValue(ItemviewModel)
-
-
     }
 
-    fun uploadImageToFirebase(bitmap: Bitmap,title:String,desc:String,lat:String,lng:String){
-
-
-        val baos=ByteArrayOutputStream()
+    fun uploadImageToFirebase(
+        bitmap: Bitmap,
+        title: String,
+        desc: String,
+        lat: String,
+        lng: String
+    ) {
+        //Here we are uploading image to firebase
+        val baos = ByteArrayOutputStream()
         val filename = java.util.UUID.randomUUID().toString()
-        val storageRef: StorageReference = FirebaseStorage.getInstance().reference.child("places/"+filename+".jpg")
-          bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos)
-        val image=baos.toByteArray()
-        val upload=storageRef.putBytes(image)
-        upload.addOnCompleteListener{ uploadTask ->
-            if(uploadTask.isSuccessful){
-                storageRef.downloadUrl.addOnCompleteListener{ uriTask ->
+        val storageRef: StorageReference =
+            FirebaseStorage.getInstance().reference.child("places/" + filename + ".jpg")
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val image = baos.toByteArray()
+        val upload = storageRef.putBytes(image)
+        upload.addOnCompleteListener { uploadTask ->
+            //On success of image upload we are saving everything in firebase database
+            if (uploadTask.isSuccessful) {
+                storageRef.downloadUrl.addOnCompleteListener { uriTask ->
                     uriTask.result.let {
-                        //Toast.makeText(applicationContext,it.path,Toast.LENGTH_SHORT).show()
-                        saveAdminDataToFirebase(title,desc,lat,lng,it.toString())
+                        saveAdminDataToFirebase(title, desc, lat, lng, it.toString())
                         Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show()
-                        val intent= Intent(this,AdminMainActivity::class.java)
+                        val intent = Intent(this, AdminMainActivity::class.java)
                         startActivity(intent)
                         finish()
-
                     }
-
                 }
-            }else
-            {
-               uploadTask.exception?.let {
-                   Toast.makeText(applicationContext,it.message,Toast.LENGTH_SHORT).show()
-               }
+            } else {
+                uploadTask.exception?.let {
+                    Toast.makeText(applicationContext, it.message, Toast.LENGTH_SHORT).show()
+                }
             }
 
         }

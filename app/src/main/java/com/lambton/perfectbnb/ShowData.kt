@@ -16,7 +16,7 @@ import retrofit2.Response
 
 
 class ShowData : Fragment() {
-    private var cityname: String? = ""
+    private var cityName: String? = ""
     private var latitude: String = "0.0"
     private var longitude: String = "0.0"
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +46,7 @@ class ShowData : Fragment() {
             val button = view.findViewById<ImageView>(R.id.cross)
             val city = view.findViewById<TextView>(R.id.textView3)
             val temp = view.findViewById<TextView>(R.id.temperature)
-            city.text = cityname
+            city.text = cityName
             showWeatherData(temp)
             builder.setView(view)
             button.setOnClickListener {
@@ -59,7 +59,7 @@ class ShowData : Fragment() {
     }
 
     private fun setupUI() {
-        cityname = arguments?.getString("city")
+        cityName = arguments?.getString("city")
         latitude = arguments?.getString("lat").toString()
         longitude = arguments?.getString("lng").toString()
         requireActivity().logoutButton.visibility = View.GONE

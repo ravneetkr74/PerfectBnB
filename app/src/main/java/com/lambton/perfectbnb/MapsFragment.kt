@@ -45,16 +45,15 @@ class MapsFragment : Fragment() {
 
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private val permissionId = 2
-     var lat: String="-34.0"
-     var lng: String="151.0"
-    var flag:Boolean=false
     lateinit var locality:String
     lateinit var mapFragment:SupportMapFragment
    private lateinit var locationRequest:com.google.android.gms.location.LocationRequest
     private lateinit var locationCallback: LocationCallback
     lateinit var show_status:TextView
     lateinit var locate_me:Button
-
+    var lat: String="-34.0"
+    var lng: String="151.0"
+    var flag:Boolean=false
     private val callback = OnMapReadyCallback { googleMap ->
         val latLng = LatLng(lat.toDouble(), lng.toDouble())
         if(flag) {
@@ -133,7 +132,7 @@ class MapsFragment : Fragment() {
                     val geocoder = Geocoder(requireContext(), Locale.getDefault())
                     val list: List<Address> =
                         geocoder.getFromLocation(p0.lastLocation.latitude, p0.lastLocation.longitude, 1)
-                    locality = "${list[0].locality}"
+                    locality = list[0].locality
                     saveLocationToFirebase(lat,lng)
                     flag=true
                     show_status.visibility=View.VISIBLE

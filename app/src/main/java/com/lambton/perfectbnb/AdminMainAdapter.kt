@@ -55,8 +55,7 @@ public abstract class AdminMainAdapter(val context: Context,private val mlist:Li
             ItemsViewModel.lng!!.toDouble(),
             1
         )
-        val address: String = addresses[0].getAddressLine(0)
-        holder.place.text=address
+        holder.place.text=addresses[0].locality
         holder.itemView.setOnClickListener {
             itemClickListener(position)
         }
