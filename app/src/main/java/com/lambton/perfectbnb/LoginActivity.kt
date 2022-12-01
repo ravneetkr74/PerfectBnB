@@ -23,19 +23,14 @@ class LoginActivity : AppCompatActivity() {
             val intent= Intent(this,SignUpActivity::class.java)
             startActivity(intent)
         }
-
     }
-
     private fun loginUser(){
         val email=editTextTextPersonName.text.toString()
         val password=editTextTextPersonName2.text.toString()
-
         if(email.isBlank()||password.isBlank()){
-
             Toast.makeText(this,"Email and Password can't be blank",Toast.LENGTH_SHORT).show()
             return
         }
-
         firebaseAuth.signInWithEmailAndPassword(email,password)
             .addOnCompleteListener(this){
                 if(it.isSuccessful){
@@ -52,8 +47,5 @@ class LoginActivity : AppCompatActivity() {
 
                 }
             }
-
-
-
     }
 }
