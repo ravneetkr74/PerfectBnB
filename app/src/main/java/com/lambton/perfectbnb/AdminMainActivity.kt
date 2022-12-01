@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
@@ -46,7 +47,13 @@ class AdminMainActivity : AppCompatActivity() {
         recycler.visibility=View.VISIBLE
         layout.visibility=View.GONE
         recycler.layoutManager = LinearLayoutManager(this)
-        adapter = AdminMainAdapter(this,updatedList)
+        adapter = object : AdminMainAdapter(this, updatedList) {
+            override fun itemClickListener(position: Int) {
+
+                Toast.makeText(this@AdminMainActivity,"get click"+position,Toast.LENGTH_SHORT).show()
+            }
+        }
+
 
 
         val database = FirebaseDatabase.getInstance()

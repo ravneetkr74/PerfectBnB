@@ -8,12 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+
 import java.util.*
 
 
-class AdminMainAdapter(val Context: Context,private val mlist:List<ItemviewModel>) :
+public abstract class AdminMainAdapter(val context: Context,private val mlist:List<ItemviewModel>) :
     RecyclerView.Adapter<AdminMainAdapter.ViewHolder>() {
 
 
@@ -22,6 +24,11 @@ class AdminMainAdapter(val Context: Context,private val mlist:List<ItemviewModel
         val title: TextView = itemView.findViewById(R.id.toolTitle)
         val desc: TextView = itemView.findViewById(R.id.txtDesc)
         val place: TextView = itemView.findViewById(R.id.txtplace)
+
+
+
+
+
 
     }
 
@@ -42,7 +49,7 @@ class AdminMainAdapter(val Context: Context,private val mlist:List<ItemviewModel
             Picasso.get().load(it).into(holder.imageView)
         }
 
-        val geocoder: Geocoder = Geocoder(Context, Locale.getDefault())
+        val geocoder: Geocoder = Geocoder(context, Locale.getDefault())
         val addresses: List<Address> =  geocoder.getFromLocation(
             ItemsViewModel.lat!!.toDouble(),
             ItemsViewModel.lng!!.toDouble(),
@@ -50,10 +57,14 @@ class AdminMainAdapter(val Context: Context,private val mlist:List<ItemviewModel
         )
         val address: String = addresses[0].getAddressLine(0)
         holder.place.text=address
+        holder.itemView.setOnClickListener {
+            itemClickListener(position)
+        }
 
     }
 
     override fun getItemCount(): Int {
         return mlist.size
     }
+    abstract  fun itemClickListener(position: Int)
 }
