@@ -1,7 +1,6 @@
-package com.lambton.perfectbnb
+package com.lambton.perfectbnb.admin
 
 import android.content.Intent
-import android.content.res.Resources
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
@@ -12,12 +11,12 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.gson.Gson
+import com.lambton.perfectbnb.R
+import com.lambton.perfectbnb.models.ItemviewModel
 import com.squareup.picasso.Picasso
 import com.vansuita.pickimage.bundle.PickSetup
 import com.vansuita.pickimage.dialog.PickImageDialog
 import kotlinx.android.synthetic.main.activity_add_data.*
-import kotlinx.android.synthetic.main.activity_admin_main.*
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.header_layout.*
 import java.io.ByteArrayOutputStream
 

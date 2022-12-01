@@ -1,4 +1,4 @@
-package com.lambton.perfectbnb
+package com.lambton.perfectbnb.admin
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,7 +13,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.annotations.Nullable
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_add_data.*
+import com.lambton.perfectbnb.R
+import com.lambton.perfectbnb.models.ItemviewModel
 import kotlinx.android.synthetic.main.activity_admin_main.*
 import kotlinx.android.synthetic.main.header_layout.*
 
@@ -36,7 +37,7 @@ class AdminMainActivity : AppCompatActivity() {
             finish()
         }
         setting.setOnClickListener {
-            val intent= Intent(this,AddData::class.java)
+            val intent= Intent(this, AddData::class.java)
             startActivity(intent)
         }
         initializeListView()
@@ -49,7 +50,7 @@ class AdminMainActivity : AppCompatActivity() {
         recycler.layoutManager = LinearLayoutManager(this)
         adapter = object : AdminMainAdapter(this, updatedList) {
             override fun itemClickListener(position: Int) {
-                val intent= Intent(context,AddData::class.java)
+                val intent= Intent(context, AddData::class.java)
                 val gson = Gson()
                 val myJson = gson.toJson(updatedList[position])
                 intent.putExtra("data", myJson)
@@ -73,7 +74,7 @@ class AdminMainActivity : AppCompatActivity() {
                 // our data base and after adding new child
                 // we are adding that item inside our array list and
                 // notifying our adapter that the data in adapter is changed.
-                updatedList.add(snapshot.getValue(com.lambton.perfectbnb.ItemviewModel::class.java)!!)
+                updatedList.add(snapshot.getValue(ItemviewModel::class.java)!!)
                 Log.e("@#@","get list value"+updatedList.size+updatedList.get(0).Title)
                 adapter.notifyDataSetChanged()
             }
@@ -94,7 +95,7 @@ class AdminMainActivity : AppCompatActivity() {
                 // by comparing with it's value.
                 // after removing the data we are notifying our adapter that the
                 // data has been changed.
-                updatedList.remove(snapshot.getValue(com.lambton.perfectbnb.ItemviewModel::class.java))
+                updatedList.remove(snapshot.getValue(ItemviewModel::class.java))
                 adapter.notifyDataSetChanged()
             }
 

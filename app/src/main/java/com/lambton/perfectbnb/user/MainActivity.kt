@@ -1,11 +1,11 @@
-package com.lambton.perfectbnb
+package com.lambton.perfectbnb.user
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.ui.AppBarConfiguration
 import com.google.android.material.navigation.NavigationView
+import com.lambton.perfectbnb.R
 import com.lambton.perfectbnb.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.header_layout.*
 

@@ -1,4 +1,4 @@
-package com.lambton.perfectbnb
+package com.lambton.perfectbnb.user
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -20,7 +20,6 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.location.*
 import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -28,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.lambton.perfectbnb.R
 import kotlinx.android.synthetic.main.header_layout.*
 import java.util.*
 import java.util.concurrent.TimeUnit

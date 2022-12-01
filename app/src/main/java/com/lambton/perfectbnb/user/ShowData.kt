@@ -1,4 +1,4 @@
-package com.lambton.perfectbnb
+package com.lambton.perfectbnb.user
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,6 +9,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.lambton.perfectbnb.network.ApiUtilities
+import com.lambton.perfectbnb.models.ModalClass
+import com.lambton.perfectbnb.R
 import kotlinx.android.synthetic.main.header_layout.*
 import retrofit2.Call
 import retrofit2.Callback

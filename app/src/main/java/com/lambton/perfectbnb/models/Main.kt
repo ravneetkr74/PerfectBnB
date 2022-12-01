@@ -1,4 +1,4 @@
-package com.lambton.perfectbnb
+package com.lambton.perfectbnb.models
 
 import com.google.gson.annotations.SerializedName
 
