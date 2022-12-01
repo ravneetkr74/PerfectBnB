@@ -80,11 +80,7 @@ class AddData : AppCompatActivity() {
         ItemviewModel.Description=desc
         ItemviewModel.lat=lat
         ItemviewModel.lng=lng
-       // ItemviewModel.Image = image
-
-Log.e("xxx",image)
-
-
+        ItemviewModel.Image = image
         myRef.child("Places").push().setValue(ItemviewModel)
 
 
@@ -104,7 +100,7 @@ Log.e("xxx",image)
                 storageRef.downloadUrl.addOnCompleteListener{ uriTask ->
                     uriTask.result.let {
                         //Toast.makeText(applicationContext,it.path,Toast.LENGTH_SHORT).show()
-                        saveAdminDataToFirebase(title,desc,lat,lng,it.path.toString())
+                        saveAdminDataToFirebase(title,desc,lat,lng,it.toString())
                         Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show()
                         val intent= Intent(this,AdminMainActivity::class.java)
                         startActivity(intent)

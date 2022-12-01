@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import java.util.*
 
 
@@ -41,6 +42,11 @@ class AdminMainAdapter(val Context: Context,private val mlist:List<ItemviewModel
 //        // sets the text to the textview from our itemHolder class
         holder.title.text = ItemsViewModel.Title
         holder.desc.text=ItemsViewModel.Description
+        val url: String? = ItemsViewModel.Image
+        url?.let {
+            Picasso.get().load(it).into(holder.imageView)
+        }
+
 
 
         val geocoder: Geocoder

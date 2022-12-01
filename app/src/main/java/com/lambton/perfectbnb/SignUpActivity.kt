@@ -27,11 +27,24 @@ class SignUpActivity : AppCompatActivity() {
             val intent=Intent(this,LoginActivity::class.java)
             startActivity(intent)
         }
+        autoLogin()
 
 
     }
 
-  private fun SignUpUser(){
+    private fun autoLogin() {
+         firebaseAuth.currentUser?.let {
+          if (it.email == "admin@gmail.com"){
+              val intent = Intent(this, AdminMainActivity::class.java)
+              startActivity(intent)
+          }else {
+              val intent = Intent(this, MainActivity::class.java)
+              startActivity(intent)
+          }
+         }
+    }
+
+    private fun SignUpUser(){
       val useremail=email.text.toString()
       val password=password.text.toString()
       val confirmPassword=confirm_password.text.toString()
